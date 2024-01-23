@@ -1,10 +1,7 @@
-
-
-const apiKey = 'your-api-key';
-const city = 'Town-Name';
+const apiKey = 'api-key';
+let city = 'city-name'; 
 
 const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-
 
 function updateWeatherInfo(cityName, description, temperature) {
   const weatherInfoElement = document.getElementById('weather-info');
@@ -14,8 +11,9 @@ function updateWeatherInfo(cityName, description, temperature) {
   `;
 }
 
+async function getWeatherData(city) {
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-async function getWeatherData() {
   try {
     const response = await fetch(apiUrl);
     const weatherData = await response.json();
@@ -24,12 +22,22 @@ async function getWeatherData() {
     const temperature = weatherData.main.temp;
     const description = weatherData.weather[0].description;
 
-
     updateWeatherInfo(cityName, description, temperature);
   } catch (error) {
     console.error('Error fetching weather data:', error.message);
   }
 }
 
+function searchWeather() {
+  const cityInput = document.getElementById('cityInput');
+  const cityName = cityInput.value;
 
-getWeatherData();
+  if (cityName) {
+    city = cityName;
+    getWeatherData(city);
+  } else {
+    alert('Please enter a city name.');
+  }
+}
+
+getWeatherData(city);
